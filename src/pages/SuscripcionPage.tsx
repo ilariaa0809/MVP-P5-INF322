@@ -36,7 +36,7 @@ export default function SuscripcionWizard() {
   });
 
   const seleccionados = DIAS.filter((d) => dias[d.id] !== null);
-  const vigencia = modalidad === "mensual" ? "30 de septiembre" : "11 de septiembre";
+  const vigencia = modalidad === "mensual" ? "30 de noviembre" : "6 de noviembre";
 
   const guardar = () => {
     guardarSuscripcion({
@@ -53,7 +53,7 @@ export default function SuscripcionWizard() {
       <div className="mx-auto max-w-3xl">
         <div className="flex items-center gap-2 text-brand">
           <CalendarRange className="h-5 w-5" />
-          <span className="text-sm font-semibold tracking-wide uppercase">Caso A · Usuario suscrito</span>
+          <span className="text-sm font-semibold tracking-wide uppercase">Caso A · Suscripción recurrente</span>
         </div>
         <h1 className="mt-1 font-[family-name:var(--font-display)] text-3xl font-semibold">
           {suscripcion ? "Editar mi suscripción" : "Crear mi suscripción"}
@@ -93,12 +93,12 @@ export default function SuscripcionWizard() {
                   {
                     id: "semanal" as const,
                     titulo: "Suscripción semanal",
-                    detalle: "Rige de lunes 7 a viernes 11 de septiembre. Se renueva cada viernes.",
+                    detalle: "Rige de lunes 2 a viernes 6 de noviembre. Se renueva cada viernes.",
                   },
                   {
                     id: "mensual" as const,
                     titulo: "Suscripción mensual",
-                    detalle: "Rige hasta el 30 de septiembre. Precio preferente para funcionarios.",
+                    detalle: "Rige hasta el 30 de noviembre. Precio preferente para funcionarios y docentes.",
                   },
                 ]
               ).map((m) => (

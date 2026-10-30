@@ -1,16 +1,25 @@
-import { MapPin, ShieldAlert } from "lucide-react";
+import { MapPin, ShieldAlert, TriangleAlert } from "lucide-react";
+import { useCasino } from "@/lib/casino-store";
+import { cn } from "@/lib/utils";
 import { AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { EstadoChip } from "./MenuCard";
 import { estadoDe } from "@/lib/casino-data";
 import type { PlatoDiario } from "@/lib/menu-diario";
 
 export function PlatoExpandible({ plato, compromiso }: { plato: PlatoDiario; compromiso?: string | undefined }) {
+  const { restricciones } = useCasino();
+  const conflictos = plato.alergenos.filter((a) => restricciones.includes(a));
   return (
     <AccordionItem value={plato.id} className="overflow-hidden rounded-lg border bg-surface shadow-sm">
       <AccordionTrigger className="gap-4 px-4 py-4 text-base hover:bg-secondary/50 hover:no-underline">
         <span className="min-w-0">
           <span className="block font-medium text-foreground">{plato.nombre}</span>
           {compromiso && <span className="mt-1 block text-xs font-medium text-brand">{compromiso}</span>}
+          {conflictos.length > 0 && (
+            <span className="mt-1 flex items-center gap-1 text-xs font-medium text-danger">
+              <TriangleAlert className="h-3.5 w-3.5" /> Contiene {conflictos.join(", ").toLowerCase()} · no apto según tus restricciones
+            </span>
+          )}
         </span>
       </AccordionTrigger>
       <AccordionContent className="px-4 pb-4">
@@ -18,7 +27,17 @@ export function PlatoExpandible({ plato, compromiso }: { plato: PlatoDiario; com
           <h3 className="flex items-center gap-2 text-sm font-semibold text-foreground"><ShieldAlert className="h-4 w-4 text-muted-foreground" />Alérgenos</h3>
           {plato.alergenos.length ? (
             <ul className="mt-2 flex flex-wrap gap-2">
-              {plato.alergenos.map((a) => <li key={a} className="rounded-md bg-warning-soft px-2.5 py-1 text-xs font-medium text-warning-foreground">{a}</li>)}
+              {plato.alergenos.map((a) => (
+                <li
+                  key={a}
+                  className={cn(
+                    "rounded-md px-2.5 py-1 text-xs font-medium",
+                    restricciones.includes(a) ? "bg-danger-soft text-danger" : "bg-warning-soft text-warning-foreground",
+                  )}
+                >
+                  {a}
+                </li>
+              ))}
             </ul>
           ) : <p className="mt-2 text-sm text-muted-foreground">Sin alérgenos declarados.</p>}
           <p className="mt-2 text-xs text-muted-foreground">Información simulada. Confirma los ingredientes y la posible contaminación cruzada con cocina.</p>

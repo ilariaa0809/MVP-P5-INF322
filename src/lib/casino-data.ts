@@ -14,11 +14,11 @@ export const COMEDORES: { id: ComedorId; nombre: string; ubicacion: string }[] =
 ];
 
 export const DIAS: { id: DiaId; nombre: string; corto: string; fecha: string }[] = [
-  { id: "lun", nombre: "Lunes", corto: "L", fecha: "7 de septiembre" },
-  { id: "mar", nombre: "Martes", corto: "M", fecha: "8 de septiembre" },
-  { id: "mie", nombre: "Miércoles", corto: "M", fecha: "9 de septiembre" },
-  { id: "jue", nombre: "Jueves", corto: "J", fecha: "10 de septiembre" },
-  { id: "vie", nombre: "Viernes", corto: "V", fecha: "11 de septiembre" },
+  { id: "lun", nombre: "Lunes", corto: "L", fecha: "2 de noviembre" },
+  { id: "mar", nombre: "Martes", corto: "M", fecha: "3 de noviembre" },
+  { id: "mie", nombre: "Miércoles", corto: "M", fecha: "4 de noviembre" },
+  { id: "jue", nombre: "Jueves", corto: "J", fecha: "5 de noviembre" },
+  { id: "vie", nombre: "Viernes", corto: "V", fecha: "6 de noviembre" },
 ];
 
 export const HORA_CORTE = "16:00";

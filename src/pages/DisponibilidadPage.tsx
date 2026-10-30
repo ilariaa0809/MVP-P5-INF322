@@ -5,7 +5,7 @@ import { AppShell } from "@/components/casino/AppShell";
 import { PlatoExpandible } from "@/components/casino/PlatoExpandible";
 import { Accordion } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
-import { CATEGORIAS_MENU, menuDelDia } from "@/lib/menu-diario";
+import { ALERGENOS, CATEGORIAS_MENU, menuDelDia } from "@/lib/menu-diario";
 import { cn } from "@/lib/utils";
 import {
   DIAS,
@@ -23,7 +23,7 @@ import { usePageTitle } from "@/lib/usePageTitle";
 
 export default function Panel() {
   usePageTitle("Menú del día y disponibilidad | Casino USM");
-  const { platoDe, platos, suscripcion, reservas } = useCasino();
+  const { platoDe, platos, suscripcion, reservas, restricciones, alternarRestriccion } = useCasino();
   const [dia, setDia] = useState<DiaId>("lun");
   const menu = useMemo(() => menuDelDia(dia, platos), [dia, platos]);
 
@@ -116,6 +116,27 @@ export default function Panel() {
             <span className="ml-2 text-xs opacity-70">{d.fecha.split(" de ")[0]}</span>
           </Button>
         ))}
+      </div>
+
+      <div className="mt-4 flex flex-wrap items-center gap-2 text-sm">
+        <span className="text-muted-foreground">Mis restricciones alimentarias:</span>
+        {ALERGENOS.map((a) => {
+          const activa = restricciones.includes(a);
+          return (
+            <button
+              key={a}
+              type="button"
+              aria-pressed={activa}
+              onClick={() => alternarRestriccion(a)}
+              className={cn(
+                "rounded-full border px-3 py-1 text-xs font-medium transition-colors",
+                activa ? "border-danger/60 bg-danger-soft text-danger" : "border-border bg-surface hover:bg-secondary",
+              )}
+            >
+              {a}
+            </button>
+          );
+        })}
       </div>
 
       <Accordion key={dia} type="multiple" className="mt-6 grid items-start gap-x-6 gap-y-5 md:grid-cols-2">

@@ -30,6 +30,8 @@ export type Reserva = {
 
 type Ctx = {
   usuario: { nombre: string; cargo: string };
+  restricciones: string[];
+  alternarRestriccion: (alergeno: string) => void;
   platos: Plato[];
   suscripcion: Suscripcion;
   reservas: Reserva[];
@@ -51,7 +53,7 @@ export function CasinoProvider({ children }: { children: ReactNode }) {
   const [suscripcion, setSuscripcion] = useState<Suscripcion>({
     modalidad: "mensual",
     comedor: "casa-central",
-    vigenciaHasta: "30 de septiembre",
+    vigenciaHasta: "30 de noviembre",
     dias: [
       { dia: "lun", tipo: "hipocalorico", liberado: false },
       { dia: "mar", tipo: "comun", liberado: false },
@@ -62,6 +64,7 @@ export function CasinoProvider({ children }: { children: ReactNode }) {
     { id: "r-1", dia: "mie", comedor: "edificio-p", tipo: "vegetariano", confirmada: false },
   ]);
 
+  const [restricciones, setRestricciones] = useState<string[]>([]);
   const avisados = useRef<Record<string, string>>({});
 
   const platoDe = useCallback(
@@ -132,7 +135,12 @@ export function CasinoProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const value: Ctx = {
-    usuario: { nombre: "Pedro Gonzales", cargo: "Dirección de Asuntos Docentes · Casa Central" },
+    usuario: { nombre: "Marcela Aravena Reyes", cargo: "Secretaria de Dirección · Casa Central" },
+    restricciones,
+    alternarRestriccion: (alergeno) =>
+      setRestricciones((prev) =>
+        prev.includes(alergeno) ? prev.filter((a) => a !== alergeno) : [...prev, alergeno],
+      ),
     platos,
     suscripcion,
     reservas,

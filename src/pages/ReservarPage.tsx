@@ -60,7 +60,7 @@ export default function ReservaPuntual() {
         <div className="flex items-center gap-2 text-warning-foreground">
           <Ticket className="h-5 w-5" />
           <span className="text-sm font-semibold tracking-wide uppercase">
-            Caso B · Usuario sin suscripción
+            Caso B · Reserva para un día puntual
           </span>
         </div>
         <h1 className="mt-1 font-[family-name:var(--font-display)] text-3xl font-semibold">

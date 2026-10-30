@@ -1,10 +1,7 @@
 import React from 'react'
-import { createRoot } from 'react-dom/client';
+import { createRoot } from 'react-dom/client'
+import App from './App'
+import './styles.css'
 
-import Layout from './components/layout'
-
-import './stylesheets/index.scss'
-
-document.body.innerHTML = '<div id="root"></div>';
-const root = createRoot(document.getElementById('root'));
-root.render(<Layout />);
+document.body.innerHTML = '<div id="root"></div>'
+createRoot(document.getElementById('root')).render(<App />)

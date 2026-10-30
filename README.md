@@ -1,35 +1,16 @@
-# frontend-sample-app
+# Casino USM (réplica en React)
 
-Basic Frontend Development Environment to start an app with Webpack
-
-This repo includes `Webpack` to start an environment to build frontend views using `React`.
-
-### Requirements
-
-- Node >= 16.13.1
-- npm >= 8.1.2
-
-### Quick start
-
-Install dependences
+Reconstrucción en React + Webpack de https://university-lunch-hub.lovable.app
+(no es el código original).
 
 ```
 npm install
-```
-
-Launch environment
-
-```
 npm run dev
 ```
 
-Now you can open http://localhost:5050
+Abre http://localhost:5050
 
-### Packages included
-
-- [Webpack](https://webpack.js.org/)
-- [React Router](https://reactrouter.com/en/main)
-
-### About stylesheets
-
-- Sample stylesheets were written using the [BEM](https://getbem.com/) structure
+- **Disponibilidad**: replicada de lo que se ve en la página original.
+- **Mis compromisos, Suscripción y Reserva puntual**: diseñadas por inferencia (no se pudo ver el original).
+- `src/state/AppContext.jsx`: estado en memoria (se pierde al recargar, como en el prototipo original).
+- `src/data/menus.js`: datos simulados y `SIMULATED_NOW` para probar el corte de las 16:00 hrs.

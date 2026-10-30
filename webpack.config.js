@@ -1,56 +1,20 @@
-/* eslint-disable max-lines-per-function */
-const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 
-module.exports = (_, argv) => ({
+module.exports = {
   entry: './src/index.js',
-  output: {
-    filename: '[name].[contenthash].js',
-    publicPath: '/'
-  },
-  plugins: [
-    new MiniCssExtractPlugin({
-      filename: '[name].[contenthash].css'
-    }),
-    new HtmlWebpackPlugin({
-      title: 'Interfaz energética'
-    })
-  ],
-  resolve: {
-    extensions: ['*', '.js', '.jsx']
-  },
+  output: { filename: '[name].[contenthash].js', publicPath: '/' },
+  plugins: [new HtmlWebpackPlugin({ title: 'Disponibilidad de menús | Casino USM' })],
+  resolve: { extensions: ['.js', '.jsx'] },
   module: {
     rules: [
       {
         test: /\.(js|jsx)$/,
+        exclude: /node_modules/,
         loader: 'babel-loader',
-        options: {
-          presets: [
-            '@babel/preset-react'
-          ]
-        }
+        options: { presets: ['@babel/preset-react'] }
       },
-      {
-        test: /\.s?css$/,
-        use: argv.mode === 'production'
-          ? [MiniCssExtractPlugin.loader, 'css-loader', 'sass-loader']
-          : ['style-loader', 'css-loader', 'sass-loader']
-      },
-      {
-        test: /\.(png|jpe?g|gif)$/i,
-        use: [
-          {
-            loader: 'file-loader'
-          }
-        ]
-      }
+      { test: /\.css$/, use: ['style-loader', 'css-loader'] }
     ]
   },
-  devServer: {
-    port: 5050,
-    hot: false,
-    historyApiFallback: {
-      index: '/'
-    }
-  }
-})
+  devServer: { port: 5050, hot: false, historyApiFallback: true }
+}

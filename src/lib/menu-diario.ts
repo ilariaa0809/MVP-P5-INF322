@@ -11,6 +11,9 @@ export const CATEGORIAS_MENU: { id: CategoriaMenu; nombre: string }[] = [
   { id: "hipocalorico", nombre: "Hipocalórico" },
 ];
 
+/** Alérgenos que aparecen en la minuta; la usuaria puede declararlos como restricción. */
+export const ALERGENOS = ["Leche", "Huevo", "Trigo (gluten)", "Pescado"];
+
 type Receta = { nombre: string; alergenos: string[] };
 export type PlatoDiario = Receta & {
   id: string;
@@ -46,14 +49,14 @@ export function menuDelDia(dia: DiaId, platos: Plato[]): PlatoDiario[] {
   const fondo = (categoria: CategoriaMenu, tipo: "comun" | "vegetariano" | "hipocalorico"): PlatoDiario => {
     const disponibles = COMEDORES.flatMap((c) => {
       const plato = platos.find((p) => p.key === keyDe(dia, c.id, tipo));
-      return plato ? [{ ubicacion: c.id === "edificio-p" ? "Casino P" : "Patio central", plato }] : [];
+      return plato ? [{ ubicacion: c.nombre, plato }] : [];
     });
     return { id: `${dia}-${categoria}`, categoria, nombre: disponibles[0]?.plato.nombre ?? "Menú no publicado", alergenos: ALERGENOS_FONDOS[dia][tipo], disponibilidad: disponibles };
   };
   const fondoB: PlatoDiario = {
     ...simple("fondo-b", extras.fondoB),
     disponibilidad: COMEDORES.map((c, i) => ({
-      ubicacion: c.id === "edificio-p" ? "Casino P" : "Patio central",
+      ubicacion: c.nombre,
       plato: { key: `${dia}|${c.id}|fondo-b`, dia, comedor: c.id, tipo: "comun", nombre: extras.fondoB.nombre,
         producidas: i === 0 ? 140 : 90, canjeadas: STOCK_FONDO_B[dia][i] ?? 0 },
     })),

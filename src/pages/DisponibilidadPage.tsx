@@ -2,13 +2,14 @@ import { Link } from "react-router-dom";
 import { useMemo, useState } from "react";
 import { AlertTriangle, CalendarClock } from "lucide-react";
 import { AppShell } from "@/components/casino/AppShell";
-import { MenuCard } from "@/components/casino/MenuCard";
+import { PlatoExpandible } from "@/components/casino/PlatoExpandible";
+import { Accordion } from "@/components/ui/accordion";
+import { Button } from "@/components/ui/button";
+import { CATEGORIAS_MENU, menuDelDia } from "@/lib/menu-diario";
 import { cn } from "@/lib/utils";
 import {
-  COMEDORES,
   DIAS,
   HORA_CORTE,
-  TIPOS,
   estadoDe,
   fechaDia,
   keyDe,
@@ -21,9 +22,10 @@ import { useCasino } from "@/lib/casino-store";
 import { usePageTitle } from "@/lib/usePageTitle";
 
 export default function Panel() {
-  usePageTitle("Disponibilidad de menús | Casino USM");
-  const { platoDe, suscripcion, reservas } = useCasino();
+  usePageTitle("Menú del día y disponibilidad | Casino USM");
+  const { platoDe, platos, suscripcion, reservas } = useCasino();
   const [dia, setDia] = useState<DiaId>("lun");
+  const menu = useMemo(() => menuDelDia(dia, platos), [dia, platos]);
 
   const comprometidos = useMemo(() => {
     const map = new Map<string, string>();
@@ -59,10 +61,10 @@ export default function Panel() {
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
           <h1 className="font-[family-name:var(--font-display)] text-3xl font-semibold text-foreground">
-            Disponibilidad de menús
+            Menú del día
           </h1>
           <p className="mt-1 text-muted-foreground">
-            Revisa cuántas raciones quedan antes de bajar al comedor.
+            Casino USM · {nombreDia(dia)} {fechaDia(dia)}
           </p>
         </div>
         <div className="flex items-center gap-2 rounded-md border border-brand/30 bg-brand-soft px-3 py-2 text-sm text-brand">
@@ -98,8 +100,10 @@ export default function Panel() {
 
       <div className="mt-6 flex flex-wrap gap-2">
         {DIAS.map((d) => (
-          <button
+          <Button
             key={d.id}
+             variant="outline"
+             aria-pressed={dia === d.id}
             onClick={() => setDia(d.id)}
             className={cn(
               "rounded-md border px-4 py-2 text-sm font-medium transition-colors",
@@ -110,36 +114,22 @@ export default function Panel() {
           >
             {d.nombre}
             <span className="ml-2 text-xs opacity-70">{d.fecha.split(" de ")[0]}</span>
-          </button>
+          </Button>
         ))}
       </div>
 
-      <p className="mt-3 text-sm text-muted-foreground">
-        Minuta del {nombreDia(dia).toLowerCase()} {fechaDia(dia)}
-      </p>
-
-      <div className="mt-4 space-y-6">
-        {COMEDORES.map((c) => (
-          <section key={c.id} className="rounded-xl border border-border bg-secondary/40 p-4">
-            <header className="mb-3 flex flex-wrap items-baseline justify-between gap-2">
-              <h2 className="font-[family-name:var(--font-display)] text-xl font-semibold">{c.nombre}</h2>
-              <span className="text-sm text-muted-foreground">{c.ubicacion}</span>
-            </header>
-            <div className="grid gap-3 md:grid-cols-3">
-              {TIPOS.map((t) => {
-                const plato = platoDe(dia, c.id, t.id);
-                return (
-                  <MenuCard
-                    key={t.id}
-                    plato={plato}
-                    comprometido={comprometidos.get(plato.key)}
-                  />
-                );
-              })}
+      <Accordion key={dia} type="multiple" className="mt-6 grid items-start gap-x-6 gap-y-5 md:grid-cols-2">
+        {CATEGORIAS_MENU.map((categoria) => (
+          <section key={categoria.id} aria-labelledby={`categoria-${categoria.id}`} className="min-w-0">
+            <h2 id={`categoria-${categoria.id}`} className="mb-2 font-[family-name:var(--font-display)] text-lg font-semibold">{categoria.nombre}</h2>
+            <div className="space-y-2">
+              {menu.filter((p) => p.categoria === categoria.id).map((p) => (
+                <PlatoExpandible key={p.id} plato={p} compromiso={p.disponibilidad.map((d) => comprometidos.get(d.plato.key)).find(Boolean)} />
+              ))}
             </div>
           </section>
         ))}
-      </div>
+      </Accordion>
     </AppShell>
   );
 }
